@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Students</h2>
+    <a href="{% url 'student_add' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Add Student
+    </a>
+</div>
+
+<!-- Search Form -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form method="GET">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="Search students..." value="{{ request.GET.search }}">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Students Table -->
+<div class="card">
+    <div class="card-body">
+        {% if students %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Year</th>
+                            <th>Courses</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ student.pk }}</td>
+                            <td>{{ student.student_id }}</td>
+                            <td>{{ student.get_full_name }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.get_year_display }}</td>
+                            <td>{{ student.courses.count }} course{{ student.courses.count|pluralize }}</td>
+                            <td>
+                                <a href="{% url 'student_detail' student.pk %}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'student_edit' student.pk %}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{% url 'student_delete' student.pk %}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if students.has_other_pages %}
+                <nav>
+                    <ul class="pagination">
+                        {% if students.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ students.previous_page_number }}&search={{ request.GET.search }}">Previous</a>
+                            </li>
+                        {% endif %}
+                        
+                        <li class="page-item active">
+                            <span class="page-link">Page {{ students.number }} of {{ students.paginator.num_pages }}</span>
+                        </li>
+                        
+                        {% if students.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ students.next_page_number }}&search={{ request.GET.search }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No students found</h5>
+                <a href="{% url 'student_add' %}" class="btn btn-primary">Add First Student</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

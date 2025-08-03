@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    <i class="fas fa-user me-2"></i>{{ student.get_full_name }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+                        <p><strong>Email:</strong> {{ student.email }}</p>
+                        <p><strong>Year:</strong> {{ student.get_year_display }}</p>
+                        <p><strong>Enrolled:</strong> {{ student.created_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Enrolled Courses</h5>
+                    {% if student.courses.all %}
+                        <div class="row">
+                            {% for course in student.courses.all %}
+                                <div class="col-md-6 mb-2">
+                                    <div class="badge bg-primary">{{ course.code }} - {{ course.name }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No courses enrolled yet.</p>
+                    {% endif %}
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Grades</h5>
+                    {% if grades %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Grade</th>
+                                        <th>Marks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for grade in grades %}
+                                    <tr>
+                                        <td>{{ grade.course.name }}</td>
+                                        <td><span class="badge bg-success">{{ grade.grade }}</span></td>
+                                        <td>{{ grade.marks }}/100</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No grades recorded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{% url 'student_edit' student.pk %}" class="btn btn-warning w-100 mb-2">
+                    <i class="fas fa-edit me-1"></i>Edit Student
+                </a>
+                <a href="{% url 'grade_add' %}" class="btn btn-info w-100 mb-2">
+                    <i class="fas fa-plus me-1"></i>Add Grade
+                </a>
+                <a href="{% url 'student_delete' student.pk %}" class="btn btn-danger w-100">
+                    <i class="fas fa-trash me-1"></i>Delete Student
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{% url 'student_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Back to Students
+    </a>
+</div>
+{% endblock %}

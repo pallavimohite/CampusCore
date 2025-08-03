@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row slide-in-left">
+    <div class="col-md-12">
+        <h1 class="display-4 text-center mb-5">
+            <i class="fas fa-tachometer-alt me-3"></i>
+            Welcome to Dashboard
+        </h1>
+    </div>
+</div>
+
+<!-- Stats Cards with Enhanced Design -->
+<div class="row mt-4 slide-in-right">
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="stats-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <i class="fas fa-users"></i>
+            <h3>{{ total_students }}</h3>
+            <p class="mb-0">Total Students</p>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="stats-card" style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);">
+            <i class="fas fa-book"></i>
+            <h3>{{ total_courses }}</h3>
+            <p class="mb-0">Total Courses</p>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>{{ total_grades }}</h3>
+            <p class="mb-0">Total Grades</p>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="fas fa-chart-line"></i>
+            <h3>4.2</h3>
+            <p class="mb-0">Avg GPA</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 fade-in">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5><i class="fas fa-clock me-2"></i>Recent Students</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_students %}
+                    {% for student in recent_students %}
+                        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="student-photo bg-primary d-flex align-items-center justify-content-center me-3">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">{{ student.get_full_name }}</h6>
+                                    <small class="text-muted">{{ student.student_id }}</small>
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ student.created_at|timesince }} ago</small>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-users fa-2x text-muted mb-3"></i>
+                        <p class="text-muted">No students yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-3">
+                    <a href="{% url 'student_add' %}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Add New Student
+                    </a>
+                    <a href="{% url 'course_add' %}" class="btn btn-success btn-lg">
+                        <i class="fas fa-book-plus me-2"></i>Add New Course
+                    </a>
+                    <a href="{% url 'grade_add' %}" class="btn btn-info btn-lg">
+                        <i class="fas fa-graduation-cap-plus me-2"></i>Add New Grade
+                    </a>
+                    <a href="{% url 'student_list' %}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-list me-2"></i>View All Students
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Section: Quick Stats -->
+<div class="row mt-5 fade-in">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie me-2"></i>System Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <i class="fas fa-user-graduate fa-2x text-primary mb-2"></i>
+                        <h6>Active Students</h6>
+                        <p class="text-muted">{{ total_students }} enrolled</p>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fas fa-chalkboard-teacher fa-2x text-success mb-2"></i>
+                        <h6>Available Courses</h6>
+                        <p class="text-muted">{{ total_courses }} courses</p>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fas fa-award fa-2x text-info mb-2"></i>
+                        <h6>Grades Recorded</h6>
+                        <p class="text-muted">{{ total_grades }} grades</p>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
+                        <h6>Success Rate</h6>
+                        <p class="text-muted">95.8% passing</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
